@@ -1,0 +1,97 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <!-- Profile card -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    {% if profile.avatar %}
+                        <img src="{{ profile.avatar.url }}" alt="{{ user.username }}" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'assets/img/avatars/default-avatar.png' %}" alt="{{ user.username }}" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% endif %}
+                    <h4 class="mb-1">{{ user.get_full_name|default:user.username }}</h4>
+                    {% if profile.location %}
+                        <p class="text-muted mb-3"><i class="bx bx-map-pin me-1"></i>{{ profile.location }}</p>
+                    {% endif %}
+                    {% if profile.website %}
+                        <a href="{{ profile.website }}" class="btn btn-outline-primary btn-sm mb-3" target="_blank">
+                            <i class="bx bx-globe me-1"></i>Website
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8">
+            <!-- Profile form -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Edit Profile</h5>
+                    
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}">
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" value="{{ user.email }}">
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label">Bio</label>
+                                <textarea class="form-control" name="bio" rows="3">{{ profile.bio }}</textarea>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">Location</label>
+                                <input type="text" class="form-control" name="location" value="{{ profile.location }}">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" name="phone_number" value="{{ profile.phone_number }}">
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label">Website</label>
+                                <input type="url" class="form-control" name="website" value="{{ profile.website }}">
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label">Profile Picture</label>
+                                <input type="file" class="form-control" name="avatar" accept="image/*">
+                            </div>
+                            
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
