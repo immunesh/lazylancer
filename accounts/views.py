@@ -26,11 +26,15 @@ def register(request):
                 [user.email],
                 fail_silently=False,
             )
-            messages.success(request, 'Registration successful. Please check your email to verify your account.')
+            messages.success(request, 'Registration successful! Please check your email to verify your account.')
             return redirect('login')
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
     else:
         form = UserRegistrationForm()
-    return render(request, 'accounts/register.html', {'form': form})
+    return render(request, 'account-signup.html', {'form': form})
 
 def verify_email(request, token):
     try:
@@ -39,7 +43,8 @@ def verify_email(request, token):
         user.is_active = True
         user.save()
         verification.delete()
-        messages.success(request, 'Email verified successfully. You can now login.')
+        messages.success(request, 'Email verified successfully! You can now log in.')
         return redirect('login')
     except EmailVerificationToken.DoesNotExist:
-        raise Http404("Invalid verification token")
+        messages.error(request, 'Invalid verification token.')
+        return redirect('login')

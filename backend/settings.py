@@ -139,3 +139,8 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = ''  # Add your email
 EMAIL_HOST_PASSWORD = ''  # Add your email password or app-specific password
 DEFAULT_FROM_EMAIL = ''  # Add your email
+
+# Authentication settings
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'main'
+LOGIN_URL = 'login'
