@@ -1,13 +1,223 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LazyLancer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="utf-8" />
+    <title>Lazylancer | Software Dev Agency Landing v.3</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Silicon - Multipurpose Technology Bootstrap Template" />
+    <meta name="keywords" content="bootstrap, business, creative agency, mobile app showcase, saas, fintech, finance, online courses, software, medical, conference landing, services, e-commerce, shopping cart, multipurpose, shop, ui kit, marketing, seo, landing, blog, portfolio, html5, css3, javascript, gallery, slider, touch, creative" />
+    <meta name="author" content="Createx Studio" />
+
+    <!-- Viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Theme switcher (color modes) -->
+    <script src="{% static 'js/theme-switcher.js' %}"></script>
+
+    <!-- Vendor Styles -->
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Main Theme Styles + Bootstrap -->
+    <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}" />
+
+    <!-- Page loading styles -->
+    <style>
+        .page-loading {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-transition: all 0.4s 0.2s ease-in-out;
+            transition: all 0.4s 0.2s ease-in-out;
+            background-color: #fff;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 9999;
+        }
+
+        [data-bs-theme="dark"] .page-loading {
+            background-color: #0b0f19;
+        }
+
+        .page-loading.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .page-loading-inner {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            -webkit-transition: opacity 0.2s ease-in-out;
+            transition: opacity 0.2s ease-in-out;
+            opacity: 0;
+        }
+
+        .page-loading.active > .page-loading-inner {
+            opacity: 1;
+        }
+
+        .page-loading-inner > span {
+            display: block;
+            font-size: 1rem;
+            font-weight: normal;
+            color: #9397ad;
+        }
+
+        [data-bs-theme="dark"] .page-loading-inner > span {
+            color: #fff;
+            opacity: 0.6;
+        }
+
+        .page-spinner {
+            display: inline-block;
+            width: 2.75rem;
+            height: 2.75rem;
+            margin-bottom: 0.75rem;
+            vertical-align: text-bottom;
+            border: 0.15em solid #b4b7c9;
+            border-right-color: transparent;
+            border-radius: 50%;
+            -webkit-animation: spinner 0.75s linear infinite;
+            animation: spinner 0.75s linear infinite;
+        }
+
+        [data-bs-theme="dark"] .page-spinner {
+            border-color: rgba(255, 255, 255, 0.4);
+            border-right-color: transparent;
+        }
+
+        @-webkit-keyframes spinner {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spinner {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <!-- Page custom styles -->
+    <style>
+        /* Spin animation */
+        @-webkit-keyframes hero-spin {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes hero-spin {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        .hero-animation-spin {
+            -webkit-animation: hero-spin 35s linear infinite;
+            animation: hero-spin 35s linear infinite;
+        }
+
+        /* Fade animation */
+        @-webkit-keyframes hero-fade {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes hero-fade {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .hero-animation-fade {
+            -webkit-animation: hero-fade 4s ease-in infinite;
+            animation: hero-fade 4s ease-in infinite;
+        }
+
+        .hero-animation-delay-1,
+        .hero-animation-delay-2,
+        .hero-animation-delay-3 {
+            opacity: 0;
+        }
+
+        .hero-animation-delay-1 {
+            animation-delay: 0.75s;
+        }
+
+        .hero-animation-delay-2 {
+            animation-delay: 1.5s;
+        }
+
+        .hero-animation-delay-3 {
+            animation-delay: 2s;
+        }
+    </style>
+
+    <!-- Page loading scripts -->
+    <script>
+        (function () {
+            window.onload = function () {
+                const preloader = document.querySelector(".page-loading");
+                preloader.classList.remove("active");
+                setTimeout(function () {
+                    preloader.remove();
+                }, 1000);
+            };
+        })();
+    </script>
 </head>
+
 <body>
-    {% block content %}
-    {% endblock %}
+    <!-- Page loading spinner -->
+    <div class="page-loading active">
+        <div class="page-loading-inner">
+            <div class="page-spinner"></div>
+            <span>Loading...</span>
+        </div>
+    </div>
+
+    <!-- Page wrapper for sticky footer -->
+    <main class="page-wrapper">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Back to top button -->
+    <a href="#top" class="btn-scroll-top" data-scroll>
+        <span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span>
+        <i class="btn-scroll-top-icon bx bx-chevron-up"></i>
+    </a>
+
+    <!-- Vendor Scripts -->
+    <script src="{% static 'vendor/rellax/rellax.min.js' %}"></script>
+    <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+    <!-- Main Theme Script -->
+    <script src="{% static 'js/theme.min.js' %}"></script>
 </body>
 </html> 

@@ -25,4 +25,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('', TemplateView.as_view(template_name='index.html'), name='main'),
     path('dashboard/', include('dashboard.urls')),
+    path('about/', TemplateView.as_view(template_name='about.html'), name='about'),
+    path('services/', TemplateView.as_view(template_name='services.html'), name='services'),
+    path('services/<int:service_id>/', TemplateView.as_view(template_name='service-detail.html'), name='service_detail'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
