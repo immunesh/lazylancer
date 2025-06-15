@@ -141,6 +141,6 @@ EMAIL_HOST_PASSWORD = ''  # Add your email password or app-specific password
 DEFAULT_FROM_EMAIL = ''  # Add your email
 
 # Authentication settings
-LOGIN_REDIRECT_URL = 'dashboard'
+LOGIN_REDIRECT_URL = 'dashboard:dashboard'
 LOGOUT_REDIRECT_URL = 'main'
 LOGIN_URL = 'login'

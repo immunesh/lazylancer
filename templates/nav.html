@@ -1,5 +1,7 @@
 {% load static %}
-<header class="header navbar navbar-expand-lg navbar-dark position-absolute navbar-sticky">
+<header
+  class="header navbar navbar-expand-lg navbar-dark position-absolute navbar-sticky"
+>
   <div class="container px-3">
     <a href="{% url 'main' %}" class="navbar-brand pe-3">
       <img src="{% static 'assets/img/logo.svg' %}" width="47" alt="Logo" />
@@ -8,25 +10,45 @@
     <div id="navbarNav" class="offcanvas offcanvas-end bg-dark">
       <div class="offcanvas-header border-bottom border-light">
         <h5 class="offcanvas-title text-white">Menu</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="offcanvas-body">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account</a>
+            <a
+              href="#"
+              class="nav-link dropdown-toggle"
+              data-bs-toggle="dropdown"
+              >Account</a
+            >
             <div class="dropdown-menu dropdown-menu-dark">
               <a href="{% url 'login' %}" class="dropdown-item">Login</a>
               <a href="{% url 'register' %}" class="dropdown-item">Register</a>
             </div>
           </li>
           <li class="nav-item">
-            <a href="{% url 'dashboard:profile' %}" class="nav-link">Dashboard</a>
+            <a href="{% url 'dashboard:dashboard' %}" class="nav-link"
+              >Dashboard</a
+            >
           </li>
         </ul>
       </div>
     </div>
-    <button type="button" class="navbar-toggler" data-bs-toggle="offcanvas" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      type="button"
+      class="navbar-toggler"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
   </div>
-</header> 
+</header>
