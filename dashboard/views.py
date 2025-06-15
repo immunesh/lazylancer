@@ -71,3 +71,17 @@ def dashboard_view(request):
         'notifications': notifications,
     }
     return render(request, 'dashboard/dashboard.html', context)
+
+@login_required
+def notifications_view(request):
+    notifications = request.user.notifications.all().order_by('-created_at')
+    context = {
+        'notifications': notifications
+    }
+    return render(request, 'dashboard/notifications.html', context)
+
+@login_required
+def mark_all_notifications_as_read(request):
+    request.user.notifications.update(is_read=True)
+    messages.success(request, 'All notifications marked as read.')
+    return redirect('dashboard:notifications')
