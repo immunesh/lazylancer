@@ -1,0 +1,215 @@
+/* GLOBAL */
+
+body {
+  margin: 0;
+}
+
+
+/* HERO SECTION */
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 120px;
+  height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+
+/* LEFT */
+
+.hero-left {
+  max-width: 520px;
+}
+
+.hero-left h1 {
+  font-size: 64px;
+  line-height: 1.1;
+}
+
+.hero-left p {
+  margin-top: 20px;
+  color: #9ca3af;
+}
+
+/* RIGHT SECTION */
+
+.hero-right {
+  position: relative;
+  width: 550px;
+  height: 550px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* ORBIT */
+
+.orbit-container {
+  position: relative;
+  width: 550px;
+  height: 550px;
+}
+
+.orbit-ring {
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+
+
+
+/* PLANETS */
+
+.planet {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.planet.purple {
+  top: -17px;
+}
+
+.planet.blue {
+  bottom: -17px;
+}
+
+.purple {
+  background: #7c3aed;
+  box-shadow: 0 0 25px #7c3aed;
+}
+
+.blue {
+  background: #6366f1;
+  box-shadow: 0 0 25px #6366f1;
+}
+
+
+/* GLASS CARDS */
+
+.card {
+  position: absolute;
+  /* Visual styling handled by generic .card in index.css */
+  animation: float 6s ease-in-out infinite;
+}
+
+/* CARD POSITIONS (Symmetrical Z-Pattern) */
+
+.card1 {
+  top: 90px;
+  left: 60px;
+}
+
+.card2 {
+  top: 175px;
+  right: 60px;
+}
+
+.card3 {
+  top: 260px;
+  left: 60px;
+}
+
+.card4 {
+  top: 345px;
+  right: 60px;
+}
+
+.orbit-wrapper {
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  border-radius: 50%;
+  animation: orbitRotate 18s linear infinite;
+}
+
+/* CARD OFFSET ANIMATIONS */
+.card1 {
+  animation-delay: 0s;
+}
+
+.card2 {
+  animation-delay: 1.5s;
+}
+
+.card3 {
+  animation-delay: 3s;
+}
+
+.card4 {
+  animation-delay: 4.5s;
+}
+
+
+/* FLOATING ANIMATION */
+
+@keyframes float {
+
+  0% {
+    transform: translateY(0px)
+  }
+
+  50% {
+    transform: translateY(-12px)
+  }
+
+  100% {
+    transform: translateY(0px)
+  }
+
+}
+
+
+/* ORBIT ROTATION */
+
+@keyframes orbitRotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbitRotateOpposite {
+  from {
+    transform: rotate(180deg);
+  }
+
+  to {
+    transform: rotate(540deg);
+  }
+}
+
+
+/* MOBILE */
+
+@media(max-width:900px) {
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 120px 30px;
+  }
+
+  .hero-right {
+    margin-top: 60px;
+    transform: scale(0.9);
+  }
+
+  .hero-left h1 {
+    font-size: 42px;
+  }
+
+}
