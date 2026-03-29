@@ -1,23 +1,21 @@
 const express = require("express");
 const router = express.Router();
 
+const {
+  updateProfile,
+  uploadAvatar,
+} = require("../controllers/profile.controller");
+
 const authMiddleware = require("../middlewares/auth.middleware");
 const upload = require("../middlewares/upload.middleware");
 
-const portfolioController = require("../controllers/portfolio.controller");
+router.put("/update", authMiddleware, updateProfile);
 
 router.post(
- "/upload",
- authMiddleware,
- upload.single("portfolio"),
- portfolioController.uploadPortfolio
-);
-
-router.get(
-  "/my",
+  "/avatar",
   authMiddleware,
-  portfolioController.getMyPortfolio
+  upload.single("avatar"),
+  uploadAvatar
 );
-
 
 module.exports = router;

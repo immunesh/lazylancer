@@ -1,117 +1,116 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useDispatch, useSelector } from "react-redux";
+
+import { loginUser } from "../redux/slices/authSlice";
+import { getProfile } from "../redux/slices/profileSlice";
 
 const Login = () => {
-    const [formData, setFormData] = useState({
-        name: "",
-        password: "",
-        confirmPassword: "",
-    });
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [error, setError] = useState("");
-    const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-        setError("");
-    };
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-        if (!formData.name || !formData.password || !formData.confirmPassword) {
-            setError("All fields are required");
-            return;
-        }
+  const { loading, error } = useSelector((state) => state.auth);
 
-        if (formData.password !== formData.confirmPassword) {
-            setError("Passwords do not match");
-            return;
-        }
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-        //  login
-        localStorage.setItem("token", "userLoggedIn");
+  // 🔐 Normal Login
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        navigate("/");
-    };
+    const res = await dispatch(loginUser(formData));
 
-    return (
-        <div className="min-h-screen py-32 px-4 flex items-center justify-center bg-[#050a18]">
+    if (res.meta.requestStatus === "fulfilled") {
+      await dispatch(getProfile());
+      navigate("/");
+    }
+  };
 
-            <div className="w-full max-w-md">
-                <div className="bg-white/[0.03] border border-white/10 rounded-[32px] p-10">
+  // 🔥 Google Login
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:5000/api/auth/google";
+  };
 
-                    <h2 className="text-3xl text-white font-bold text-center mb-8">
-                        Login
-                    </h2>
+  return (
+    <div className="min-h-screen flex items-center justify-center
+      bg-[var(--bg-main)] text-[var(--text-main)]"
+    >
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="w-full max-w-md
+        bg-[var(--bg-card)]
+        p-8 rounded-xl shadow-lg
+      ">
 
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Full Name"
-                            onChange={handleChange}
-                            className="w-full px-5 py-4 bg-white/[0.05] text-white rounded-2xl"
-                        />
+        <h2 className="text-2xl mb-5 text-center font-semibold">
+          Login
+        </h2>
 
-                        <div className="relative">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                placeholder="Password"
-                                onChange={handleChange}
-                                className="w-full px-5 py-4 pr-20 bg-white/[0.05] text-white rounded-2xl"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword((prev) => !prev)}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-indigo-300 hover:text-white"
-                                aria-label={showPassword ? "Hide password" : "Show password"}
-                            >
-                                {showPassword ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
-                            </button>
-                        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
 
-                        <div className="relative">
-                            <input
-                                type={showConfirmPassword ? "text" : "password"}
-                                name="confirmPassword"
-                                placeholder="Confirm Password"
-                                onChange={handleChange}
-                                className="w-full px-5 py-4 pr-20 bg-white/[0.05] text-white rounded-2xl"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowConfirmPassword((prev) => !prev)}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-indigo-300 hover:text-white"
-                                aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
-                            >
-                                {showConfirmPassword ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
-                            </button>
-                        </div>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg
+              bg-transparent
+              border border-gray-300 dark:border-white/10
+              text-[var(--text-main)]"
+          />
 
-                        {error && <p className="text-red-400">{error}</p>}
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg
+              bg-transparent
+              border border-gray-300 dark:border-white/10
+              text-[var(--text-main)]"
+          />
 
-                        <button className="w-full bg-indigo-600 py-4 rounded-2xl">
-                            Sign In
-                        </button>
-                    </form>
+          {error && <p className="text-red-500">{error}</p>}
 
-                    <p className="text-center text-gray-400 mt-6">
-                        Don't have an account?{" "}
-                        <Link to="/register" className="text-indigo-400">
-                            Register
-                        </Link>
-                    </p>
+          <button className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition">
+            {loading ? "Loading..." : "Login"}
+          </button>
 
-                </div>
-            </div>
+        </form>
+
+        {/* Divider */}
+        <div className="flex items-center my-5">
+          <div className="flex-1 h-[1px] bg-gray-300 dark:bg-white/10"></div>
+          <p className="mx-3 text-sm text-[var(--text-secondary)]">OR</p>
+          <div className="flex-1 h-[1px] bg-gray-300 dark:bg-white/10"></div>
         </div>
-    );
+
+        {/* Google Button */}
+        <button
+          onClick={handleGoogleLogin}
+          className="w-full py-3 rounded-lg font-medium
+          bg-white text-black
+          hover:bg-gray-200 transition"
+        >
+          Continue with Google
+        </button>
+
+        <p className="mt-5 text-center text-[var(--text-secondary)]">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-indigo-500">
+            Register
+          </Link>
+        </p>
+
+      </div>
+    </div>
+  );
 };
 
 export default Login;

@@ -3,45 +3,31 @@ const router = express.Router();
 
 const passport = require("../config/passport");
 const authController = require("../controllers/auth.controller");
+const generateToken = require("../utils/generateToken"); // 🔥 important
 
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 
+// 🔥 GOOGLE LOGIN
 router.get(
-"/google",
-passport.authenticate("google",{scope:["profile","email"]})
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"]
+  })
 );
 
+// 🔥 CALLBACK FIX
 router.get(
-"/google/callback",
-passport.authenticate("google",{session:false}),
-(req,res)=>{
+  "/google/callback",
+  passport.authenticate("google", { session: false }),
+  (req, res) => {
 
-res.json({
- message:"Google login successful",
- user:req.user
-});
+    // 🔥 JWT token generate
+    const token = generateToken(req.user._id);
 
-}
+    // 🔥 frontend redirect
+    res.redirect(`http://localhost:5173/oauth-success?token=${token}`);
+  }
 );
-
-
-// router.get(
-// "/github",
-// passport.authenticate("github",{scope:["user:email"]})
-// );
-
-// router.get(
-// "/github/callback",
-// passport.authenticate("github",{session:false}),
-// (req,res)=>{
-
-// res.json({
-//  message:"GitHub login successful",
-//  user:req.user
-// });
-
-// }
-// );
 
 module.exports = router;

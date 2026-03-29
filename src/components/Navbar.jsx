@@ -1,122 +1,135 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
+import { logout } from "../redux/slices/authSlice";
+import { clearPortfolio } from "../redux/slices/portfolioSlice";
+import { clearProfile } from "../redux/slices/profileSlice";
+import { toggleTheme } from "../redux/slices/themeSlice";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { token } = useSelector((state) => state.auth);
+  const { data, loading } = useSelector((state) => state.profile);
+  const { mode } = useSelector((state) => state.theme);
 
-  // ✅ Sync login state
-  useEffect(() => {
-    const status = localStorage.getItem("token");
-    setIsLoggedIn(!!status);
-  }, [location]);
+  const isLoggedIn = !!token;
+  const puser = data?.user;
 
-  // ✅ Logout
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
+    dispatch(logout());
+    dispatch(clearPortfolio());
+    dispatch(clearProfile());
     navigate("/login");
   };
 
-  // ✅ Close dropdown
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
-      ) {
+    const handleClickOutside = (e) => {
+      if (!dropdownRef.current?.contains(e.target)) {
         setIsDropdownOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  //  Hide FULL navbar on auth pages
-  const hideNavbarRoutes = ["/login", "/register"];
-
-  if (hideNavbarRoutes.includes(location.pathname.toLowerCase())) {
-    return (
-      <nav className="fixed w-full top-0 left-0 px-16 h-20 flex items-center z-50">
-        <Link to="/" className="text-white font-bold text-xl">
-          LazyLancer
-        </Link>
-      </nav>
-    );
-  }
-
-  //  Dashboard visibility
-  const showDashboard = isLoggedIn;
-
   return (
-    <nav className="fixed w-full top-0 left-0 bg-transparent z-50 px-16 h-20 flex items-center justify-between">
+    <nav className="fixed w-full top-0 left-0 z-50 px-16 h-20 flex items-center justify-between
+      backdrop-blur-md
+      bg-[var(--bg-main)]
+      text-[var(--text-main)]
+    ">
 
       {/* Logo */}
-      <Link to="/" className="text-white font-bold text-xl">
+      <Link to="/" className="font-bold text-xl">
         LazyLancer
       </Link>
 
-      <div className="flex items-center gap-10 text-white">
+      <div className="flex items-center gap-6">
 
-        {/* Account Dropdown */}
-        <div
-          ref={dropdownRef}
-          onMouseEnter={() => setIsDropdownOpen(true)}
-          onMouseLeave={() => setIsDropdownOpen(false)}
-          className="relative cursor-pointer"
+        {/* Theme Toggle */}
+        <button
+          onClick={() => dispatch(toggleTheme())}
+          className="px-4 py-2 rounded-lg
+          bg-[var(--bg-card)]"
         >
-          Account
+          {mode === "dark" ? "🌙 Dark" : "☀️ Light"}
+        </button>
 
-          {isDropdownOpen && (
-            <div className="absolute top-full left-0 bg-[#0f172a] rounded-lg w-36 mt-2 shadow-lg">
-
-              {!isLoggedIn ? (
-                <>
-                  <Link
-                    to="/login"
-                    className="block px-4 py-2 hover:bg-white/10"
-                  >
-                    Login
-                  </Link>
-
-                  <Link
-                    to="/register"
-                    className="block px-4 py-2 hover:bg-white/10"
-                  >
-                    Register
-                  </Link>
-                </>
-              ) : (
-                <button
-                  onClick={handleLogout}
-                  className="block px-4 py-2 w-full text-left hover:bg-white/10"
-                >
-                  Logout
-                </button>
-              )}
-
-            </div>
-          )}
-        </div>
-
-        {/* Dashboard Button */}
-        {showDashboard && (
+        {/* Dashboard */}
+        {isLoggedIn && (
           <button
             onClick={() => navigate("/dashboard")}
-            className="bg-white/10 px-4 py-2 rounded-lg hover:bg-white/20"
+            className="px-4 py-2 rounded-lg
+            bg-[var(--bg-card)]"
           >
             Dashboard
           </button>
         )}
 
+        {/* Login */}
+        {!isLoggedIn && (
+          <button
+            onClick={() => navigate("/login")}
+            className="px-5 py-2 rounded-lg bg-indigo-600 text-white"
+          >
+            Login
+          </button>
+        )}
+
+        {/* Profile */}
+        {isLoggedIn && (
+          <div ref={dropdownRef} className="relative">
+
+            {loading ? (
+              <div className="w-10 h-10 rounded-full bg-gray-300 animate-pulse"></div>
+            ) : puser?.avatar ? (
+              <img
+                src={puser.avatar}
+                alt="profile"
+                className="w-10 h-10 rounded-full object-cover cursor-pointer"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              />
+            ) : (
+              <div
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white"
+              >
+                {puser?.name?.charAt(0).toUpperCase()}
+              </div>
+            )}
+
+            {/* Dropdown */}
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-40 rounded-lg shadow-lg
+                bg-[var(--bg-card)]"
+              >
+                <button
+                  onClick={() => navigate("/profile")}
+                  className="block px-4 py-2 w-full text-left"
+                >
+                  My Profile
+                </button>
+
+                <button
+                  onClick={handleLogout}
+                  className="block px-4 py-2 w-full text-left"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+
+          </div>
+        )}
       </div>
-    </nav >
+    </nav>
   );
 };
 
