@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
+import Home from "./pages/Home";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -44,18 +44,13 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/*  Navbar  render hoga */}
       <Navbar />
 
       <SkeletonTheme baseColor="#1e293b" highlightColor="#334155">
         <Routes>
-          {/* Protected Home */}
-          <Route path="/" element={<Hero />} />
-          {/* Auth Pages */}
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          {/* Dashboard */}
-          
           <Route
             path="/dashboard"
             element={

@@ -19,6 +19,7 @@ const Navbar = () => {
   const { data, loading } = useSelector((state) => state.profile);
   const { mode } = useSelector((state) => state.theme);
 
+  const isLandingPage = location.pathname === "/";
   const isLoggedIn = !!token;
   const puser = data?.user;
 
@@ -35,97 +36,94 @@ const Navbar = () => {
         setIsDropdownOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <nav className="fixed w-full top-0 left-0 z-50 px-16 h-20 flex items-center justify-between
-      backdrop-blur-md
-      bg-[var(--bg-main)]
-      text-[var(--text-main)]
-    ">
-
-      {/* Logo */}
-      <Link to="/" className="font-bold text-xl">
+    <nav
+      className={`fixed left-0 top-0 z-50 flex h-20 w-full items-center justify-between px-6 lg:px-16 ${
+        isLandingPage
+          ? "bg-transparent text-slate-900 dark:text-white"
+          : "bg-[var(--bg-main)] text-[var(--text-main)] backdrop-blur-md"
+      }`}
+    >
+      <Link to="/" className="text-xl font-bold">
         LazyLancer
       </Link>
 
-      <div className="flex items-center gap-6">
-
-        {/* Theme Toggle */}
+      <div className="flex items-center gap-4 lg:gap-6">
         <button
           onClick={() => dispatch(toggleTheme())}
-          className="px-4 py-2 rounded-lg
-          bg-[var(--bg-card)]"
+          className={`rounded-xl px-4 py-2 text-sm font-medium transition ${
+            isLandingPage
+              ? "border border-slate-300 bg-white/80 text-slate-900 backdrop-blur-md hover:bg-white dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+              : "bg-[var(--bg-card)]"
+          }`}
         >
-          {mode === "dark" ? "🌙 Dark" : "☀️ Light"}
+          {mode === "dark" ? "Dark" : "Light"}
         </button>
 
-        {/* Dashboard */}
         {isLoggedIn && (
           <button
             onClick={() => navigate("/dashboard")}
-            className="px-4 py-2 rounded-lg
-            bg-[var(--bg-card)]"
+            className={`rounded-xl px-4 py-2 ${
+              isLandingPage
+                ? "border border-slate-300 bg-white/80 text-slate-900 backdrop-blur-md dark:border-white/15 dark:bg-white/10 dark:text-white"
+                : "bg-[var(--bg-card)]"
+            }`}
           >
             Dashboard
           </button>
         )}
 
-        {/* Login */}
         {!isLoggedIn && (
           <button
             onClick={() => navigate("/login")}
-            className="px-5 py-2 rounded-lg bg-indigo-600 text-white"
+            className="rounded-xl bg-indigo-600 px-5 py-2.5 text-white"
           >
             Login
           </button>
         )}
 
-        {/* Profile */}
         {isLoggedIn && (
           <div ref={dropdownRef} className="relative">
-
             {loading ? (
-              <div className="w-10 h-10 rounded-full bg-gray-300 animate-pulse"></div>
+              <div className="h-10 w-10 animate-pulse rounded-full bg-gray-300"></div>
             ) : puser?.avatar ? (
               <img
                 src={puser.avatar}
                 alt="profile"
-                className="w-10 h-10 rounded-full object-cover cursor-pointer"
+                className="h-10 w-10 cursor-pointer rounded-full object-cover"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               />
             ) : (
               <div
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 text-white"
               >
                 {puser?.name?.charAt(0).toUpperCase()}
               </div>
             )}
 
-            {/* Dropdown */}
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-40 rounded-lg shadow-lg
-                bg-[var(--bg-card)]"
-              >
+              <div className="absolute right-0 mt-2 w-40 rounded-lg bg-[var(--bg-card)] shadow-lg">
                 <button
                   onClick={() => navigate("/profile")}
-                  className="block px-4 py-2 w-full text-left"
+                  className="block w-full px-4 py-2 text-left"
                 >
                   My Profile
                 </button>
 
                 <button
                   onClick={handleLogout}
-                  className="block px-4 py-2 w-full text-left"
+                  className="block w-full px-4 py-2 text-left"
                 >
                   Logout
                 </button>
               </div>
             )}
-
           </div>
         )}
       </div>

@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ===================== */
 /* 🌍 BASE RESET */
 /* ===================== */
@@ -69,4 +71,41 @@ body.dark {
 
 body.light {
   --border-color: rgba(15, 23, 42, 0.12);   /* soft dark gray (not black) */
+}
+
+@keyframes hero-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hero-fade {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.hero-spin {
+  animation: hero-spin 35s linear infinite;
+}
+
+.hero-fade {
+  animation: hero-fade 4s ease-in-out infinite;
+}
+
+.delay-700 {
+  animation-delay: 0.7s;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
+
+.delay-1500 {
+  animation-delay: 1.5s;
 }

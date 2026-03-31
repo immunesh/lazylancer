@@ -1,76 +1,74 @@
-import React, { useState } from "react";
-import "../styles/main.css";
+import React from "react";
+
+const heroCards = [
+  "I need AI engineers",
+  "We are looking for Shopify experts",
+  "I need MVP for startup",
+  "I need web development",
+];
 
 const Hero = () => {
-  const [showDashboard, setShowDashboard] = useState(false);
-
   return (
-    <section
-      className="hero relative flex min-h-[calc(100vh-80px)] items-center justify-between px-20 pt-20 overflow-hidden
-      bg-[var(--bg-main)] text-[var(--text-main)]"
-    >
+    <section className="relative overflow-hidden bg-slate-50 pb-24 pt-32 text-slate-950 dark:bg-[#0b1020] dark:text-white sm:pb-28 lg:min-h-screen lg:pt-36">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.12),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(129,140,248,0.12),_transparent_28%)] dark:bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.24),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(129,140,248,0.18),_transparent_28%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.72),rgba(248,250,252,0.9))] dark:bg-[linear-gradient(180deg,rgba(11,16,32,0.74),rgba(11,16,32,0.88))]" />
 
-      {/* Glow orb */}
-      <div className="glow-orb w-[800px] h-[800px] -top-1/4 -right-1/4 opacity-40"></div>
+      <div className="relative mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-[1.03fr_1fr] lg:px-8">
+        <div className="flex flex-col justify-center pt-14 lg:pt-10">
+          <h1 className="max-w-2xl text-[2.9rem] font-extrabold leading-[1.05] sm:text-6xl xl:text-[4.5rem]">
+            Top <span className="text-indigo-400">software</span> engineering company
+          </h1>
+          <p className="mt-6 flex items-center gap-3 whitespace-nowrap text-lg text-slate-600 dark:text-slate-300">
+            <span className="mr-1">We are the Top Rated agency on</span>
+            <img
+              src="/assets/img/landing/software-agency-3/clutch-rating.png"
+              alt="Clutch rating"
+              className="h-7 w-auto"
+            />
+          </p>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <a
+              href="/login"
+              className="inline-flex items-center rounded-xl bg-indigo-600 px-7 py-4 text-sm font-semibold text-white shadow-lg shadow-indigo-900/30 transition hover:bg-indigo-500"
+            >
+              Get started
+            </a>
+            <a
+              href="#projects"
+              className="inline-flex items-center rounded-xl border border-slate-300 bg-white/80 px-7 py-4 text-sm font-semibold text-slate-900 transition hover:bg-white dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+            >
+              Explore projects
+            </a>
+          </div>
+        </div>
 
-      {/* LEFT */}
-      <div className="hero-left z-10 max-w-[600px] flex-shrink-0">
-        <h1 className="text-6xl font-bold leading-[1.1] mb-6 tracking-tight">
-          Top Online <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500">
-            Bidding
-          </span>{" "}
-          Site
-        </h1>
-
-        <p className="text-lg text-[var(--text-secondary)] mb-10 whitespace-nowrap">
-          We are the Top Rated agency on{" "}
-          <span className="font-semibold text-[var(--text-main)]">
-            Clutch 5.0
-          </span>
-          <span className="text-red-500 ml-2 tracking-widest text-sm">
-            ★★★★★
-          </span>
-        </p>
-
-        <button
-          onClick={() => setShowDashboard(true)}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-4 rounded-xl font-semibold transition-all shadow-lg hover:scale-105 active:scale-95"
-        >
-          Start your Bid
-        </button>
-      </div>
-
-      {/* RIGHT */}
-      <div className="hero-right z-10 flex-shrink-0 ml-20">
-        <div className="orbit-container">
-          <div className="orbit-ring"></div>
-
-          {/* Planets */}
-          <div className="orbit-wrapper">
-            <div className="planet purple"></div>
-            <div className="planet blue"></div>
+        <div className="relative flex items-center justify-center">
+          <div className="absolute left-1/2 top-1/2 w-[125%] max-w-3xl -translate-x-1/2 -translate-y-1/2">
+            <img
+              src="/assets/img/landing/software-agency-3/hero-bg.png"
+              alt=""
+              className="hero-spin w-full opacity-80"
+            />
           </div>
 
-          {/* Cards */}
-          <div className="card card1 font-medium">
-            I need Freelancer
-          </div>
-
-          <div className="card card2 font-medium">
-            I need MVP for startup
-          </div>
-
-          <div className="card card3 font-medium">
-            We are looking for Shopify Experts
-          </div>
-
-          <div className="card card4 font-medium">
-            I need web development
+          <div className="relative grid w-full max-w-2xl gap-3 sm:grid-cols-2 sm:gap-4">
+            {heroCards.map((card, index) => (
+              <div
+                key={card}
+                className={`flex min-h-[176px] items-center justify-center rounded-[1.6rem] border border-slate-200 bg-white/80 p-7 text-center text-lg font-semibold text-slate-900 shadow-xl shadow-slate-200/60 backdrop-blur-md dark:border-white/10 dark:bg-white/10 dark:text-white dark:shadow-2xl dark:shadow-slate-950/20 ${
+                  index % 2 === 1 ? "sm:translate-y-12" : ""
+                }`}
+              >
+                <span
+                  className={`hero-fade block max-w-[12rem] ${index === 1 ? "delay-700" : ""} ${index === 2 ? "delay-1000" : ""} ${index === 3 ? "delay-1500" : ""}`}
+                >
+                  {card}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-
     </section>
   );
 };
