@@ -1,43 +1,72 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-@theme {
-  --color-brand-bg: #050a18;
-  --font-inter: 'Inter', sans-serif;
-}
+/* ===================== */
+/* 🌍 BASE RESET */
+/* ===================== */
 
 html,
 body {
   margin: 0;
   padding: 0;
-  overflow: auto;
   height: 100%;
 }
 
 body {
-  @apply bg-[#050a18] text-white font-inter antialiased;
+  font-family: 'Inter', sans-serif;
 }
 
+/* ===================== */
+/* 🎨 THEME VARIABLES */
+/* ===================== */
+
+/* LIGHT MODE */
+:root {
+  --bg-main: #ffffff;
+  --bg-card: #f1f5f9;
+  --text-main: #000000;
+  --text-secondary: #475569;
+}
+
+/* DARK MODE */
+html.dark {
+  --bg-main: #050a18;
+  --bg-card: rgba(255,255,255,0.05);
+  --text-main: #ffffff;
+  --text-secondary: #94a3b8;
+}
+
+/* ===================== */
+/* APPLY VARIABLES */
+/* ===================== */
+
+body {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* ===================== */
+/* 🧩 COMPONENTS */
+/* ===================== */
+
 @layer components {
+
   .card {
-    @apply bg-white/[0.04] backdrop-blur-xl border border-white/10 px-6 py-5 rounded-[20px] text-white/90 w-[220px] h-[105px] flex items-center justify-center text-center transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.5)] text-base font-medium leading-normal;
+    background: var(--bg-card);
+    color: var(--text-main);
+    @apply p-6 rounded-2xl border border-gray-200 dark:border-white/10 transition;
   }
 
-
-
-  .card:hover {
-    @apply bg-[#141b2d] border-white/10 -translate-y-1 scale-[1.02] shadow-[0_20px_60px_rgba(59,130,246,0.1)];
+  .btn {
+    @apply px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700;
   }
 
+}
 
+body.dark {
+  --border-color: rgba(148, 163, 184, 0.2);  /* soft gray (slate-400 vibe) */
+}
 
-
-
-  .dropdown-menu {
-    @apply bg-slate-900 border border-white/10 rounded-xl shadow-2xl p-3;
-  }
-
-  .glow-orb {
-    @apply absolute rounded-full bg-blue-600/20 blur-[120px];
-  }
+body.light {
+  --border-color: rgba(15, 23, 42, 0.12);   /* soft dark gray (not black) */
 }

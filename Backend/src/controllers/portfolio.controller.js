@@ -79,3 +79,19 @@ exports.uploadPortfolio = async (req, res) => {
     });
   }
 };
+
+exports.getMyPortfolio = async (req, res) => {
+  try {
+
+    const portfolio = await Portfolio.findOne({
+      userId: req.user._id
+    }).sort({ createdAt: -1 });
+
+    res.json(portfolio);
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+};

@@ -1,110 +1,154 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  uploadPortfolio,
+  getMyPortfolio,
+} from "../redux/slices/portfolioSlice";
 
 const Dashboard = () => {
-    return (
-        <div className="min-h-screen bg-[#050a18] text-white px-6 py-28">
+  const dispatch = useDispatch();
+  const { loading, data } = useSelector((state) => state.portfolio);
 
-            {/* Heading */}
-            <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+  const [portfolioUrl, setPortfolioUrl] = useState("");
+  const [file, setFile] = useState(null);
 
-            {/* Top Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+  useEffect(() => {
+    dispatch(getMyPortfolio());
+  }, [dispatch]);
 
-                <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
-                    <h2 className="text-gray-400 text-sm">Applications</h2>
-                    <p className="text-3xl font-bold mt-2">12</p>
-                </div>
+  const handleUpload = () => {
+    const formData = new FormData();
 
-                <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
-                    <h2 className="text-gray-400 text-sm">Interviews</h2>
-                    <p className="text-3xl font-bold mt-2">3</p>
-                </div>
+    if (file) formData.append("portfolio", file);
+    else if (portfolioUrl) formData.append("portfolioUrl", portfolioUrl);
 
-                <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
-                    <h2 className="text-gray-400 text-sm">Profile Score</h2>
-                    <p className="text-3xl font-bold mt-2 text-green-400">78%</p>
-                </div>
+    dispatch(uploadPortfolio(formData));
 
-            </div>
+    setPortfolioUrl("");
+    setFile(null);
+  };
 
-            {/* Resume + Profile */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+  return (
+    <div className="min-h-screen px-6 py-28
+      bg-[var(--bg-main)]
+      text-[var(--text-main)]
+    ">
 
-                {/* Resume Card */}
-                <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
-                    <h2 className="text-xl font-semibold mb-4">Resume Score</h2>
-                    <p className="text-gray-400 mb-4">
-                        Improve your resume to get better job matches.
-                    </p>
+      <h1 className="text-3xl font-bold mb-10">
+        
+      </h1>
 
-                    <div className="w-full bg-gray-700 rounded-full h-3">
-                        <div className="bg-indigo-500 h-3 rounded-full w-[78%]"></div>
-                    </div>
+      {/* Stats */}
+      <div className="grid md:grid-cols-3 gap-6 mb-10">
 
-                    <button className="mt-6 bg-indigo-600 px-4 py-2 rounded-lg">
-                        Upload Resume
-                    </button>
-                </div>
+        <div className="p-6 rounded-2xl bg-[var(--bg-card)]">
+          <p>Skills</p>
+          <h2 className="text-3xl font-bold">
+            {data?.skills?.length || 0}
+          </h2>
+        </div>
 
-                {/* Profile Card */}
-                <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
-                    <h2 className="text-xl font-semibold mb-4">Profile Info</h2>
+        <div className="p-6 rounded-2xl bg-[var(--bg-card)]">
+          <p>Projects</p>
+          <h2 className="text-3xl font-bold">
+            {data?.projects?.length || 0}
+          </h2>
+        </div>
 
-                    <p className="text-gray-300">Name: Anand Singh</p>
-                    <p className="text-gray-300 mt-2">Skills: React, Node</p>
-                    <p className="text-gray-300 mt-2">Experience: Fresher</p>
+        <div className="p-6 rounded-2xl bg-[var(--bg-card)]">
+          <p>GitHub Links</p>
+          <h2 className="text-3xl font-bold">
+            {data?.githubLinks?.length || 0}
+          </h2>
+        </div>
 
-                    <button className="mt-6 bg-blue-600 px-4 py-2 rounded-lg">
-                        Edit Profile
-                    </button>
-                </div>
+      </div>
 
-            </div>
+      {/* Upload */}
+      <div className="p-6 rounded-2xl mb-10 bg-[var(--bg-card)]">
 
-            {/* Job Suggestions */}
-            <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
+        <h2 className="text-xl mb-4">Upload Portfolio</h2>
 
-                <h2 className="text-xl font-semibold mb-6">Job Suggestions</h2>
+        <input
+          type="text"
+          placeholder="Portfolio URL"
+          value={portfolioUrl}
+          onChange={(e) => setPortfolioUrl(e.target.value)}
+          className="w-full p-3 mb-3 rounded-lg
+          bg-transparent border border-gray-300 dark:border-white/10"
+        />
 
-                <div className="space-y-4">
+        <input
+          type="file"
+          onChange={(e) => setFile(e.target.files[0])}
+          className="mb-3"
+        />
 
-                    {/* Job Card */}
-                    <div className="p-4 bg-white/5 rounded-xl flex justify-between items-center">
-                        <div>
-                            <h3 className="font-semibold">Frontend Developer</h3>
-                            <p className="text-gray-400 text-sm">Remote • React</p>
-                        </div>
-                        <button className="bg-indigo-600 px-4 py-2 rounded-lg">
-                            Apply
-                        </button>
-                    </div>
+        <button
+          onClick={handleUpload}
+          className="px-4 py-2 rounded-lg bg-indigo-600 text-white"
+        >
+          Analyze
+        </button>
 
-                    <div className="p-4 bg-white/5 rounded-xl flex justify-between items-center">
-                        <div>
-                            <h3 className="font-semibold">Backend Developer</h3>
-                            <p className="text-gray-400 text-sm">Node.js • API</p>
-                        </div>
-                        <button className="bg-indigo-600 px-4 py-2 rounded-lg">
-                            Apply
-                        </button>
-                    </div>
+      </div>
 
-                    <div className="p-4 bg-white/5 rounded-xl flex justify-between items-center">
-                        <div>
-                            <h3 className="font-semibold">Full Stack Developer</h3>
-                            <p className="text-gray-400 text-sm">MERN Stack</p>
-                        </div>
-                        <button className="bg-indigo-600 px-4 py-2 rounded-lg">
-                            Apply
-                        </button>
-                    </div>
+      {/* Skills */}
+      {data?.skills?.length > 0 && (
+        <div className="p-6 rounded-2xl mb-10 bg-[var(--bg-card)]">
 
-                </div>
+          <h2 className="text-xl mb-4">Skills</h2>
 
-            </div>
+          <div className="flex flex-wrap gap-2">
+            {data.skills.map((skill, i) => (
+              <span
+                key={i}
+                className="px-3 py-1 rounded-full bg-indigo-600 text-white"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
 
         </div>
-    );
+      )}
+
+      {/* Projects */}
+      {data?.projects?.length > 0 && (
+        <div className="p-6 rounded-2xl mb-10 bg-[var(--bg-card)]">
+
+          <h2 className="text-xl mb-4">Projects</h2>
+
+          {data.projects.map((p, i) => (
+            <div key={i} className="mb-2">
+              • {p}
+            </div>
+          ))}
+
+        </div>
+      )}
+
+      {/* Suggestions */}
+      <div className="p-6 rounded-2xl bg-[var(--bg-card)]">
+
+        <h2 className="text-xl mb-4">AI Suggestions 🤖</h2>
+
+        <div className="space-y-3">
+          <div className="p-4 rounded-lg bg-gray-200 dark:bg-white/10">
+            Build a SaaS Dashboard
+          </div>
+          <div className="p-4 rounded-lg bg-gray-200 dark:bg-white/10">
+            Create Chat App
+          </div>
+          <div className="p-4 rounded-lg bg-gray-200 dark:bg-white/10">
+            Add Auth System
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  );
 };
 
 export default Dashboard;

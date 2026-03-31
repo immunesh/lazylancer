@@ -1,131 +1,165 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../redux/slices/authSlice";
+
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const Register = () => {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-    });
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [error, setError] = useState("");
-    const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-        setError("");
-    };
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-        if (
-            !formData.name ||
-            !formData.email ||
-            !formData.password ||
-            !formData.confirmPassword
-        ) {
-            setError("All fields are required");
-            return;
-        }
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-        if (formData.password !== formData.confirmPassword) {
-            setError("Passwords do not match");
-            return;
-        }
+  const { loading, error } = useSelector((state) => state.auth);
 
-        //  save user
-        localStorage.setItem("user", JSON.stringify(formData));
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-        navigate("/login");
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    return (
-        <div className="min-h-screen py-32 px-4 flex items-center justify-center bg-[#050a18]">
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) return;
 
-            <div className="w-full max-w-md">
-                <div className="bg-white/[0.03] border border-white/10 rounded-[32px] p-10">
+    if (formData.password !== formData.confirmPassword) return;
 
-                    <h2 className="text-3xl text-white font-bold text-center mb-8">
-                        Register
-                    </h2>
+    const res = await dispatch(registerUser({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password
+    }));
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
+    if (res.meta.requestStatus === "fulfilled") {
+      navigate("/login");
+    }
+  };
 
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Full Name"
-                            onChange={handleChange}
-                            className="w-full px-5 py-4 bg-white/[0.05] text-white rounded-2xl"
-                        />
+  return (
+    <div className="min-h-screen py-32 px-4 flex items-center justify-center
+      bg-[var(--bg-main)] text-[var(--text-main)]"
+    >
 
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Email"
-                            onChange={handleChange}
-                            className="w-full px-5 py-4 bg-white/[0.05] text-white rounded-2xl"
-                        />
+      <div className="w-full max-w-md">
 
-                        <div className="relative">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                placeholder="Password"
-                                onChange={handleChange}
-                                className="w-full px-5 py-4 pr-20 bg-white/[0.05] text-white rounded-2xl"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword((prev) => !prev)}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-indigo-300 hover:text-white"
-                                aria-label={showPassword ? "Hide password" : "Show password"}
-                            >
-                                {showPassword ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
-                            </button>
-                        </div>
+        <div className="p-10 rounded-[32px]
+          bg-[var(--bg-card)]
+          border border-gray-200 dark:border-white/10
+          shadow-lg
+        ">
 
-                        <div className="relative">
-                            <input
-                                type={showConfirmPassword ? "text" : "password"}
-                                name="confirmPassword"
-                                placeholder="Confirm Password"
-                                onChange={handleChange}
-                                className="w-full px-5 py-4 pr-20 bg-white/[0.05] text-white rounded-2xl"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowConfirmPassword((prev) => !prev)}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-indigo-300 hover:text-white"
-                                aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
-                            >
-                                {showConfirmPassword ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
-                            </button>
-                        </div>
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Register
+          </h2>
 
-                        {error && <p className="text-red-400">{error}</p>}
+          <form onSubmit={handleSubmit} className="space-y-5">
 
-                        <button className="w-full bg-indigo-600 py-4 rounded-2xl">
-                            Create Account
-                        </button>
-                    </form>
+            {/* Name */}
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              onChange={handleChange}
+              className="w-full px-5 py-4 rounded-2xl
+                bg-transparent
+                border border-gray-300 dark:border-white/10
+                text-[var(--text-main)]"
+            />
 
-                    <p className="text-center text-gray-400 mt-6">
-                        Already have an account?{" "}
-                        <Link to="/login" className="text-indigo-400">
-                            Login
-                        </Link>
-                    </p>
+            {/* Email */}
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              onChange={handleChange}
+              className="w-full px-5 py-4 rounded-2xl
+                bg-transparent
+                border border-gray-300 dark:border-white/10
+                text-[var(--text-main)]"
+            />
 
-                </div>
+            {/* Password */}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                onChange={handleChange}
+                className="w-full px-5 py-4 pr-20 rounded-2xl
+                  bg-transparent
+                  border border-gray-300 dark:border-white/10
+                  text-[var(--text-main)]"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-indigo-500"
+              >
+                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </button>
             </div>
+
+            {/* Confirm Password */}
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                onChange={handleChange}
+                className="w-full px-5 py-4 pr-20 rounded-2xl
+                  bg-transparent
+                  border border-gray-300 dark:border-white/10
+                  text-[var(--text-main)]"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword((prev) => !prev)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-indigo-500"
+              >
+                {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </button>
+            </div>
+
+            {/* Error */}
+            {error && <p className="text-red-500">{error}</p>}
+
+            {/* Submit */}
+            <button className="w-full py-4 rounded-2xl bg-indigo-600 text-white hover:bg-indigo-700 transition">
+              {loading ? "Creating..." : "Create Account"}
+            </button>
+
+          </form>
+
+          {/* Footer */}
+          <p className="text-center mt-6 text-[var(--text-secondary)]">
+            Already have an account?{" "}
+            <Link to="/login" className="text-indigo-500">
+              Login
+            </Link>
+          </p>
+
         </div>
-    );
+
+      </div>
+    </div>
+  );
 };
 
 export default Register;

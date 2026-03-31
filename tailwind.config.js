@@ -1,13 +1,12 @@
 export default {
-  content: ["./index.html","./src/**/*.{js,jsx}"],
+  darkMode: "class",
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
     extend: {
-
-      animation:{
-        "spin-slow":"spin 30s linear infinite"
-      }
-
+      animation: {
+        "spin-slow": "spin 30s linear infinite",
+      },
     },
   },
   plugins: [],
-}
+};
