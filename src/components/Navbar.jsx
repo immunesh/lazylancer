@@ -20,6 +20,8 @@ const Navbar = () => {
   const { mode } = useSelector((state) => state.theme);
 
   const isLandingPage = location.pathname === "/";
+  const isAuthPage =
+    location.pathname === "/login" || location.pathname === "/register";
   const isLoggedIn = !!token;
   const puser = data?.user;
 
@@ -78,7 +80,7 @@ const Navbar = () => {
           </button>
         )}
 
-        {!isLoggedIn && (
+        {!isLoggedIn && !isAuthPage && (
           <button
             onClick={() => navigate("/login")}
             className="rounded-xl bg-indigo-600 px-5 py-2.5 text-white"
