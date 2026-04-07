@@ -7,15 +7,21 @@ const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
 const portfolioRoutes = require("./routes/portfolio.routes");
 const passport = require("./config/passport");
-const profile = require("./routes/profile.routes")
+const profile = require("./routes/profile.routes");
+const messageRoutes = require("./routes/message.routes");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(
   helmet({
     crossOriginResourcePolicy: false,
-  })
+  }),
 );
 app.use(morgan("dev"));
 app.use(passport.initialize());
@@ -27,12 +33,13 @@ app.use(passport.initialize());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/portfolio",portfolioRoutes);
+app.use("/api/portfolio", portfolioRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/profile", profile);
+app.use("/api/messages", messageRoutes);
 
-app.get("/", (req,res)=>{
-  res.json({message:"LazyLancer Backend Running"})
+app.get("/", (req, res) => {
+  res.json({ message: "LazyLancer Backend Running" });
 });
 
 module.exports = app;

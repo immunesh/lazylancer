@@ -6,6 +6,11 @@ export default {
       animation: {
         "spin-slow": "spin 30s linear infinite",
       },
+
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Syne', 'sans-serif'],
+      },
     },
   },
   plugins: [],

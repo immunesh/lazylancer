@@ -10,4 +10,7 @@ router.get(
   userController.getProfile
 );
 
+
+router.get("/" , authMiddleware , userController.getAllUsers);
+
 module.exports = router;

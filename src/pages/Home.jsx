@@ -9,6 +9,7 @@ import Benefits from "../components/Benefits";
 import Brands from "../components/Brands";
 import Blog from "../components/Blog";
 import Footer from "../components/Footer";
+import HowItWorks from "../components/HowItWorks";
 
 const Home = () => {
   return (
@@ -16,6 +17,7 @@ const Home = () => {
       <main className="overflow-x-hidden">
         <Hero />
         <About />
+        <HowItWorks />
         <Services />
         <Industries />
         <Technologies />
@@ -24,7 +26,7 @@ const Home = () => {
         <Brands />
         <Blog />
       </main>
-      <Footer />
+     
     </>
   );
 };

@@ -3,6 +3,7 @@ import authReducer from "./slices/authSlice";
 import portfolioReducer from "./slices/portfolioSlice";
 import profileReducer from "./slices/profileSlice";
 import themeReducer from "./slices/themeSlice";
+import chatReducer from "./slices/chatSlice"
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
     portfolio: portfolioReducer,
     profile: profileReducer,
     theme: themeReducer,
+    chat : chatReducer,
   },
 });

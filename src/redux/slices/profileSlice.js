@@ -48,6 +48,18 @@ export const uploadAvatar = createAsyncThunk(
   }
 );
 
+export const changePassword = createAsyncThunk(
+  "profile/changePassword",
+  async (data, thunkAPI) => {
+    try {
+      const res = await API.put("/profile/change-password", data);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const profileSlice = createSlice({
   name: "profile",
 
@@ -86,6 +98,13 @@ const profileSlice = createSlice({
 
       .addCase(getProfile.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.success = action.payload.message;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
         state.error = action.payload;
       });
   },
